@@ -13,16 +13,17 @@ public class TransactionLog {
 
     private LocalDate returnDate;
 
-    public TransactionLog(int UserId, String ISBN,String borrowed, LocalDate borrowDate,String returned,LocalDate returnDate){
-        this.UserId=UserId;
-        this.ISBN=ISBN;
-        this.borrowed=borrowed;
-        this.borrowDate=borrowDate;
-        this.Returned=returned;
-        this.returnDate=returnDate;
+    public TransactionLog(int UserId, String ISBN, String borrowed, LocalDate borrowDate, String returned, LocalDate returnDate) {
+        this.UserId = UserId;
+        this.ISBN = ISBN;
+        this.borrowed = borrowed;
+        this.borrowDate = borrowDate;
+        this.Returned = returned;
+        this.returnDate = returnDate;
     }
-    public TransactionLog(int UserId, String ISBN,String borrowed){
-        this(UserId,ISBN,borrowed,LocalDate.now(),"No",null);
+
+    public TransactionLog(int UserId, String ISBN, String borrowed) {
+        this(UserId, ISBN, borrowed, LocalDate.now(), "No", null);
     }
 
 

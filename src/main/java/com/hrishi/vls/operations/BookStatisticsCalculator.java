@@ -43,7 +43,7 @@ public class BookStatisticsCalculator {
         return count;
     }
 
-    public static void displayLibraryStatistics(List<Book> books,List<TransactionLog> log) {
+    public static void displayLibraryStatistics(List<Book> books, List<TransactionLog> log) {
         System.out.println("Library Statistics Overview:");
         System.out.println("Total Books: " + getTotalBooks(books));
         System.out.println("Available Books: " + getAvailableBooks(books));
@@ -61,13 +61,13 @@ public class BookStatisticsCalculator {
         return count;
     }
 
-    public static List<String> getAllBorrowedBookTitles(List<TransactionLog> logs,List<Book> books) {
+    public static List<String> getAllBorrowedBookTitles(List<TransactionLog> logs, List<Book> books) {
         List<String> borrowedTitles = new ArrayList<>();
         boolean booksBorrowed = false;
         for (TransactionLog logEntry : logs) {
             if (logEntry.getReturned().equalsIgnoreCase("No")) {
                 booksBorrowed = true;
-                for (Book book :books) {
+                for (Book book : books) {
                     if (book.getISBN().equals(logEntry.getISBN())) {
                         borrowedTitles.add(book.getTitle());
                         break;

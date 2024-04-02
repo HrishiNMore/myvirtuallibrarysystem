@@ -8,8 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MostBorrowedBooks {
-    public static void analyzeMostBorrowedBooks(List<Book> books,List<TransactionLog>logs, int limit) {
-
+    public static void analyzeMostBorrowedBooks(List<Book> books, List<TransactionLog> logs, int limit) {
 
 
         if (logs.isEmpty() || books.isEmpty()) {

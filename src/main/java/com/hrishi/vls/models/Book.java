@@ -7,26 +7,27 @@ public class Book {
     private LocalDate Publication_Date;
     private int noOfCopies;
     private String status;
-    public Book(String Title,String Author,String ISBN,String Genre ,LocalDate Publication_Date,int noOfCopies){
-        this.Title=Title;
-        this.Author=Author;
-        this.ISBN=ISBN;
-        this.Genre=Genre;
-        this.Publication_Date=Publication_Date;
-        this.noOfCopies=noOfCopies;
+
+    public Book(String Title, String Author, String ISBN, String Genre, LocalDate Publication_Date, int noOfCopies) {
+        this.Title = Title;
+        this.Author = Author;
+        this.ISBN = ISBN;
+        this.Genre = Genre;
+        this.Publication_Date = Publication_Date;
+        this.noOfCopies = noOfCopies;
     }
 
-    public Book(String Title,String Author,String ISBN,String Genre ,LocalDate Publication_Date){
-        this(Title,Author,ISBN,Genre,Publication_Date,100);
+    public Book(String Title, String Author, String ISBN, String Genre, LocalDate Publication_Date) {
+        this(Title, Author, ISBN, Genre, Publication_Date, 100);
 
     }
 
-    public Book(String Title,String Author,String ISBN,String Genre ,int noOfCopies){
-        this(Title,Author,ISBN,Genre,LocalDate.now(),noOfCopies);
+    public Book(String Title, String Author, String ISBN, String Genre, int noOfCopies) {
+        this(Title, Author, ISBN, Genre, LocalDate.now(), noOfCopies);
     }
 
-    public Book(String Title,String Author,String ISBN,String Genre ){
-        this(Title,Author,ISBN,Genre,LocalDate.now(),100);
+    public Book(String Title, String Author, String ISBN, String Genre) {
+        this(Title, Author, ISBN, Genre, LocalDate.now(), 100);
 
     }
 
@@ -79,7 +80,7 @@ public class Book {
         Title = title;
     }
 
-    public String getStatus(){
+    public String getStatus() {
         return status;
     }
 

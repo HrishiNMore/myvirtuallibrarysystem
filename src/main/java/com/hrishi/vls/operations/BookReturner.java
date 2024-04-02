@@ -17,47 +17,46 @@ public class BookReturner {
     static Scanner sc = new Scanner(System.in);
 
 
-    public static void ReturnBook(List<Book> books,List<TransactionLog> log) {
+    public static void ReturnBook(List<Book> books, List<TransactionLog> log) {
         System.out.println("Enter your UserID to return the book: ");
-        int UserID = sc.nextInt();
+        int userID = sc.nextInt();
         System.out.println("Enter ISBN of the Book you want to return: ");
         String isbn = sc.next();
 
-        boolean flag = false;
+        boolean foundLog = false;
+
         for (TransactionLog l : log) {
-            if (l.getUserId() == UserID && l.getISBN().equalsIgnoreCase(isbn)) {
+            if (l.getUserId() == userID && l.getISBN().equalsIgnoreCase(isbn)) {
+                foundLog = true;
 
                 for (Book bk : books) {
-
                     if (bk.getISBN().equalsIgnoreCase(isbn)) {
                         System.out.println("The book you want to return is : " + bk.getTitle());
                         System.out.println("Confirm to proceed(Y/N) :");
-                        String c = sc.next();
-                        if (c.equalsIgnoreCase("y")) {
+                        String confirmation = sc.next();
+
+                        if (confirmation.equalsIgnoreCase("y")) {
                             bk.setNoOfCopies(bk.getNoOfCopies() + 1);
-                            if(bk.getStatus().equalsIgnoreCase("out of stock")){
+                            if (bk.getStatus().equalsIgnoreCase("out of stock")) {
                                 bk.setStatus("Available");
                             }
                             l.setReturned("Yes");
                             l.setReturnDate(LocalDate.now());
-
-                            flag = true;
+                            System.out.println("Book returned successfully");
+                            return; // Fail fast after successful return
                         } else {
                             System.out.println("Thank You");
-                            System.exit(0);
+                            return; // Fail fast if confirmation is not 'y'
                         }
                     }
                 }
-
-            }
-            if (flag) {
-                System.out.println("Book returned succesfully");
-
-            } else {
-                System.out.println("No log record Exists");
             }
         }
 
+        if (!foundLog) {
+            System.out.println("No log record Exists");
+        }
     }
+
 
 }

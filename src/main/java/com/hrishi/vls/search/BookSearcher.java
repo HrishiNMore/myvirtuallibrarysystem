@@ -1,7 +1,8 @@
-package com.hrishi.vls.operations;
+package com.hrishi.vls.search;
 
 import com.hrishi.vls.models.Book;
 import com.hrishi.vls.models.Library;
+import com.hrishi.vls.operations.BookLender;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,105 +12,82 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BookSearcher {
-    private static Library library;
-    private static Scanner sc=new Scanner(System.in);
+
+    private Scanner sc = new Scanner(System.in);
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private BookLender borrow;
-    private static List<Book> books;
+    private List<Book> books;
 
-    public BookSearcher(Library lib){
-        this.library=new Library();
-        this.books=lib.books;
+    public BookSearcher(List<Book> books) {
+
+        this.books = books;
     }
 
 
-
-    public static void search() {
-
-        List<Book> result = new ArrayList<>();
+    public void search() {
         if (books.isEmpty()) {
             System.err.println("Library is Empty. Please add books");
+            return; // Fail fast if the library is empty
+        }
+
+        System.out.println("Search By : ");
+        System.out.println("1. Title");
+        System.out.println("2. Author");
+        System.out.println("3. ISBN");
+        System.out.println("4. Genre");
+        System.out.println("5. Published Date");
+        System.out.println("6. No of Copies");
+        System.out.print("Choose an option: ");
+        int option = sc.nextInt();
+        SearchStrategy searchStrategy = getSearchStrategy(option);
+        System.out.println("Enter the search key:");
+        sc.nextLine();
+        String key = sc.nextLine().trim();
+        performSearch(searchStrategy.search(books, key));
+
+
+    }
+
+    private SearchStrategy getSearchStrategy(int option) {
+        switch (option) {
+            case 1:
+                return new TitleSearchStrategy();
+            case 2:
+                return new AuthorSearchStrategy();
+            case 3:
+                return new ISBNSearchStrategy();
+            case 4:
+                return new GenreSearchStrategy();
+            case 5:
+                return new Publication_DateSearchStrategy();
+            case 6:
+                return new NoOfCopiesSearchStrategy();
+            // other choices..
+            default:
+                throw new IllegalArgumentException("Invalid option");
+        }
+    }
+
+    private void performSearch(List<Book> result) {
+        if (result.isEmpty()) {
+            System.out.println("Book Not Found");
+        } else if (result.size() == 1) {
+            Book foundBook = result.get(0);
+            System.out.println("Book Found in Library: " + foundBook.getTitle());
+            new SearchStatus().showStatus(foundBook);
         } else {
-
-
-            System.out.println("Search By : ");
-            System.out.println("1. Title");
-            System.out.println("2. Author");
-            System.out.println("3. ISBN");
-            System.out.println("4. Genre");
-            System.out.println("5. Published Date");
-            System.out.println("6. No of Copies");
-            System.out.print("Choose an option: ");
-            int a = sc.nextInt();
-            switch (a) {
-                case 1:
-                    System.out.println("Enter the Title of Book :");
-                    sc.nextLine();
-                    String title = sc.nextLine().trim();
-                    result = searchByTitle(title, books);
-                    break;
-
-                case 2:
-                    System.out.println("Enter the Author of Book :");
-                    sc.nextLine();
-                    String author = sc.nextLine();
-                    result = searchByAuthor(author, books);
-                    break;
-
-                case 3:
-                    System.out.println("Enter the ISBN of Book :");
-                    sc.nextLine();
-                    String isbn = sc.nextLine();
-                    result = searchByISBN(isbn, books);
-                    break;
-
-                case 4:
-                    System.out.println("Enter Genre of Book :");
-                    sc.nextLine();
-                    String Genre = sc.nextLine();
-                    result = searchByGenre(Genre, books);
-                    break;
-
-                case 5:
-                    System.out.println("Enter the Published Date of Book :");
-                    sc.nextLine();
-                    String d = sc.nextLine();
-                    LocalDate date = LocalDate.parse(d, formatter);
-                    result = searchByDate(date, books);
-                    break;
-
-                case 6:
-                    System.out.println("Enter the No of Copies of Book :");
-                    sc.nextLine();
-                    int noOfCopies = sc.nextInt();
-                    result = searchByCopies(noOfCopies, books);
-
-                default:
-                    System.out.println("Invalid input");
-
+            // Only prompt for filtering if there are multiple results
+            for (Book book : result) {
+                System.out.println("Title: " + book.getTitle() + " ISBN: " + book.getISBN());
             }
+            result = addfilter(result);
 
             if (result.isEmpty()) {
-                System.out.println("Book Not Found");
-            } else if (result.size() == 1) {
-                System.out.println("Book Found in Library:");
-                Book foundBook = result.get(0);
-                System.out.println(foundBook.getTitle());
-                library.showStatus(foundBook);
-            } else {
-                // Only prompt for filtering if there are multiple results
-                for (Book res : result) {
-                    System.out.println("Title : "+res.getTitle()+" ISBN - "+res.getISBN());
-                }
-                result = addfilter(result);
-
-                if (result.isEmpty()) {
-                    System.out.println("No books match the specified criteria.");
-                }
-
+                System.out.println("No books match the specified criteria.");
             }
         }
     }
+
 
     public static List<Book> searchByTitle(String title, List<Book> books) {
         List<Book> result = new ArrayList<>();
@@ -171,7 +149,7 @@ public class BookSearcher {
         return result;
     }
 
-    public static List<Book> addfilter(List<Book> result) {
+    public List<Book> addfilter(List<Book> result) {
         System.out.println("Do you want to Filter the result(Y/N) ?:");
         String ch = sc.next();
         if (!ch.equalsIgnoreCase("y")) {
@@ -238,7 +216,7 @@ public class BookSearcher {
             int bookIndex = sc.nextInt();
             if (bookIndex > 0 && bookIndex <= result.size()) {
                 Book selectedBook = result.get(bookIndex - 1);
-                library.showStatus(selectedBook);
+                new SearchStatus().showStatus(selectedBook);
                 return Collections.singletonList(selectedBook); // Return a list containing the selected book
             } else {
                 System.out.println("Invalid book selection.");

@@ -25,7 +25,7 @@ public class BorrowingTrendAnalyzer {
         int[] borrowingCounts = new int[12];
 
         // Loop through transaction logs and count borrowings for each month
-        for (TransactionLog lg :log) {
+        for (TransactionLog lg : log) {
             if (lg.getReturned().equalsIgnoreCase("No") && lg.getBorrowDate().getYear() == currentYear) {
                 int monthIndex = lg.getBorrowDate().getMonthValue() - 1; // Month index starts from 0
                 borrowingCounts[monthIndex]++;
