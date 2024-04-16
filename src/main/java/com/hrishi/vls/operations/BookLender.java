@@ -13,7 +13,13 @@ import java.util.Scanner;
 public class BookLender {
     private static Library library = new Library();
     private static Scanner sc = new Scanner(System.in);
-    BookSearcher bookSearcher;
+    private BookSearcher bookSearcher;
+
+    public BookLender() {
+        // Initialize the bookSearcher object
+        this.bookSearcher = new BookSearcher();
+    }
+
 
 
     public void borrowByISBN(List<Book> books, List<TransactionLog> log) {

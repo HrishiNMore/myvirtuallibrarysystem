@@ -22,13 +22,16 @@ public class Library {
     private ISBNChecker check = new ISBNChecker();
     public List<TransactionLog> log = new ArrayList<>();
 
-    AuthorTrendAnalyzer authorTrendAnalyzer;
-    BorrowingTrendAnalyzer borrowingTrendAnalyzer;
-    GenreTrendAnalyzer genreTrendAnalyzer;
-    MostBorrowedBooks mostBorrowedBooks;
-    BookLender bookLender;
-    BookReturner bookReturner;
-    BookStatisticsCalculator bookStatisticsCalculator;
+    private AuthorTrendAnalyzer authorTrendAnalyzer;
+    private BorrowingTrendAnalyzer borrowingTrendAnalyzer;
+    private GenreTrendAnalyzer genreTrendAnalyzer;
+    private MostBorrowedBooks mostBorrowedBooks;
+    // BookLender bookLender;
+    private BookLender bookLender;
+
+
+    private BookReturner bookReturner;
+    private BookStatisticsCalculator bookStatisticsCalculator;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     Scanner sc = new Scanner(System.in);
@@ -37,6 +40,13 @@ public class Library {
     public Library() {
         this.books = new ArrayList<>();
         this.check = new ISBNChecker();
+        this.bookLender = new BookLender();
+        this.bookReturner = new BookReturner();
+        this.authorTrendAnalyzer = new AuthorTrendAnalyzer();
+        this.borrowingTrendAnalyzer = new BorrowingTrendAnalyzer();
+        this.genreTrendAnalyzer = new GenreTrendAnalyzer();
+        this.mostBorrowedBooks = new MostBorrowedBooks();
+        this.bookStatisticsCalculator = new BookStatisticsCalculator();
     }
 
 

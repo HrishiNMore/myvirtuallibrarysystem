@@ -23,6 +23,10 @@ public class BookSearcher {
         this.books = books;
     }
 
+    public BookSearcher() {
+
+    }
+
 
     public void search() {
         if (books.isEmpty()) {
