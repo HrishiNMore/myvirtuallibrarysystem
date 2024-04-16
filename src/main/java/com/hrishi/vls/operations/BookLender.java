@@ -13,12 +13,13 @@ import java.util.Scanner;
 public class BookLender {
     private static Library library = new Library();
     private static Scanner sc = new Scanner(System.in);
+    BookSearcher bookSearcher;
 
 
-    public static void borrowByISBN(List<Book> books, List<TransactionLog> log) {
+    public void borrowByISBN(List<Book> books, List<TransactionLog> log) {
         System.out.println("Enter the ISBN of the book to borrow: ");
         String isbn = sc.next();
-        Book book = BookSearcher.searchByISBN(isbn, books).stream().findFirst().orElse(null);
+        Book book = bookSearcher.searchByISBN(isbn, books).stream().findFirst().orElse(null);
 
         if (book == null) {
             System.out.println("Book with the given ISBN not found");
@@ -61,7 +62,7 @@ public class BookLender {
     }
 
 
-    public static void OverdueNotification(int UserId, Book book, List<TransactionLog> log) {
+    public void OverdueNotification(int UserId, Book book, List<TransactionLog> log) {
         for (TransactionLog lg : log) {
             if (lg.getUserId() == UserId && lg.getReturned().equalsIgnoreCase("No") && lg.getBorrowDate().isBefore(LocalDate.now().minusMonths(3))) {
                 System.out.println("Before borrowing new book we kindly notify that you have previously borrowed the book " + book.getTitle() + "\n"
@@ -74,7 +75,7 @@ public class BookLender {
     }
 
 
-    private static void provideNavigationOptions() {
+    private void provideNavigationOptions() {
         int option;
         do {
             System.out.println("Please select an option:");
