@@ -17,7 +17,7 @@ public class BookReturner {
     static Scanner sc = new Scanner(System.in);
 
 
-    public static void ReturnBook(List<Book> books, List<TransactionLog> log) {
+    public void ReturnBook(List<Book> books, List<TransactionLog> log) {
         System.out.println("Enter your UserID to return the book: ");
         int userID = sc.nextInt();
         System.out.println("Enter ISBN of the Book you want to return: ");

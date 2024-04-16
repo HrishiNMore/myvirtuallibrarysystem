@@ -1,11 +1,10 @@
 package com.hrishi.vls;
 
 import com.hrishi.vls.models.Library;
-import com.hrishi.vls.search.BookSearcher;
 
 import java.util.Scanner;
 
-public class Main {
+public class VirtualLibrarySystem {
     private static Library lib = new Library();
 
     public static void main(String[] args) {

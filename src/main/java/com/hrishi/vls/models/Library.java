@@ -22,6 +22,14 @@ public class Library {
     private ISBNChecker check = new ISBNChecker();
     public List<TransactionLog> log = new ArrayList<>();
 
+    AuthorTrendAnalyzer authorTrendAnalyzer;
+    BorrowingTrendAnalyzer borrowingTrendAnalyzer;
+    GenreTrendAnalyzer genreTrendAnalyzer;
+    MostBorrowedBooks mostBorrowedBooks;
+    BookLender bookLender;
+    BookReturner bookReturner;
+    BookStatisticsCalculator bookStatisticsCalculator;
+
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     Scanner sc = new Scanner(System.in);
 
@@ -67,12 +75,12 @@ public class Library {
     }
 
     public void borrowBook() {
-        BookLender.borrowByISBN(books, log);
+        bookLender.borrowByISBN(books, log);
     }
 
 
     public void returnBook() {
-        BookReturner.ReturnBook(books, log);
+        bookReturner.ReturnBook(books, log);
     }
 
     public void UploadBook(String path) {
@@ -87,17 +95,17 @@ public class Library {
 
             switch (statsChoice) {
                 case 1:
-                    BookStatisticsCalculator.displayLibraryStatistics(books, log);
+                    bookStatisticsCalculator.displayLibraryStatistics(books, log);
                     break;
                 case 2:
-                    System.out.println("Total number of books present: " + BookStatisticsCalculator.getTotalBooks(books));
+                    System.out.println("Total number of books present: " + bookStatisticsCalculator.getTotalBooks(books));
                     break;
                 case 3:
-                    System.out.println("Number of currently borrowed books: " + BookStatisticsCalculator.calculateCurrentlyBorrowedBooksCount(log));
+                    System.out.println("Number of currently borrowed books: " + bookStatisticsCalculator.calculateCurrentlyBorrowedBooksCount(log));
                     break;
                 case 4:
                     System.out.println("List of titles of all borrowed books:");
-                    List<String> borrowedTitles = BookStatisticsCalculator.getAllBorrowedBookTitles(log, books);
+                    List<String> borrowedTitles = bookStatisticsCalculator.getAllBorrowedBookTitles(log, books);
                     for (String title : borrowedTitles) {
                         System.out.println(title);
                     }
@@ -122,26 +130,26 @@ public class Library {
 
             switch (analyzerChoice) {
                 case 1:
-                    BorrowingTrendAnalyzer.analyzeBorrowingTrendsPerMonth(log);
+                    borrowingTrendAnalyzer.analyzeBorrowingTrendsPerMonth(log);
                     break;
                 case 2:
-                    BorrowingTrendAnalyzer.analyzeBorrowingTrendsPerQuarter(log);
+                    borrowingTrendAnalyzer.analyzeBorrowingTrendsPerQuarter(log);
                     break;
                 case 3:
                     System.out.println("Enter the year to analyze : ");
                     int year = sc.nextInt();
-                    BorrowingTrendAnalyzer.analyzeBorrowingTrendsPerYear(log, year);
+                    borrowingTrendAnalyzer.analyzeBorrowingTrendsPerYear(log, year);
                     break;
                 case 4:
-                    GenreTrendAnalyzer.analyzeGenreTrends(books, log);
+                    genreTrendAnalyzer.analyzeGenreTrends(books, log);
                     break;
                 case 5:
-                    AuthorTrendAnalyzer.analyzeAuthorTrends(books, log);
+                    authorTrendAnalyzer.analyzeAuthorTrends(books, log);
                     break;
                 case 6:
                     System.out.println("Display Top - ");
                     int limit = sc.nextInt();
-                    MostBorrowedBooks.analyzeMostBorrowedBooks(books, log, limit);
+                    mostBorrowedBooks.analyzeMostBorrowedBooks(books, log, limit);
                     break;
                 case 7:
                     break;
