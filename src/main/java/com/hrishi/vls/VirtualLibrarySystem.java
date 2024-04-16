@@ -4,51 +4,77 @@ import com.hrishi.vls.models.Library;
 
 import java.util.Scanner;
 
-public class VirtualLibrarySystem {
+// Enum representing available library functionalities
+enum LibraryOption {
+    SEARCH_BOOK,
+    BORROW_BOOK,
+    RETURN_BOOK,
+    VIEW_INVENTORY,
+    VIEW_LOG,
+    UPLOAD_BOOKS,
+    VIEW_STATISTICS,
+    ANALYZE,
+    EXIT
+}
+
+// Refactored LibraryCommands class to manage commands associated with each LibraryOption
+class LibraryCommands {
     private static Library lib = new Library();
+
+    // Method to execute a command based on LibraryOption
+    public static void executeCommand(LibraryOption option) {
+        switch (option) {
+            case SEARCH_BOOK:
+                lib.searchBook();
+                break;
+            case BORROW_BOOK:
+                lib.borrowBook();
+                break;
+            case RETURN_BOOK:
+                lib.returnBook();
+                break;
+            case VIEW_INVENTORY:
+                lib.bookInventory();
+                break;
+            case VIEW_LOG:
+                lib.viewLog();
+                break;
+            case UPLOAD_BOOKS:
+                lib.UploadBook("src/main/resources/dataset.csv");
+                break;
+            case VIEW_STATISTICS:
+                lib.showStatistics();
+                break;
+            case ANALYZE:
+                lib.analyzer();
+                break;
+            case EXIT:
+                System.out.println("==================================================================");
+                System.out.println("\tThank You for Visiting our library. Please visit again.");
+                System.out.println("==================================================================");
+                break;
+            default:
+                System.out.println("Invalid option. Please choose a valid option.");
+        }
+    }
+}
+
+public class VirtualLibrarySystem {
 
     public static void main(String[] args) {
         boolean exit = false;
-
 
         while (!exit) {
             printMenu();
             int choice = getUserChoice();
             System.out.println("==================================================================");
 
-            switch (choice) {
-                case 1:
-                    lib.searchBook();
-                    break;
-                case 2:
-                    lib.borrowBook();
-                    break;
-                case 3:
-                    lib.returnBook();
-                    break;
-                case 4:
-                    lib.bookInventory();
-                    break;
-                case 5:
-                    lib.viewLog();
-                    break;
-                case 6:
-                    lib.UploadBook("src/main/resources/dataset.csv");
-                    break;
-                case 7:
-                    lib.showStatistics();
-                    break;
-                case 8:
-                    lib.analyzer();
-                    break;
-                case 9:
-                    System.out.println("==================================================================");
-                    System.out.println("\tThank You for Visiting our library. Please visit again.");
-                    System.out.println("==================================================================");
-                    exit = true;
-                    break;
-                default:
-                    System.out.println("Invalid option. Please choose a valid option.");
+            // Execute command based on user choice
+            LibraryOption option = LibraryOption.values()[choice - 1];
+            LibraryCommands.executeCommand(option);
+
+            if (option == LibraryOption.EXIT) {
+                exit = true;
             }
         }
     }
