@@ -1,6 +1,7 @@
 package com.hrishi.vls.models;
 
 
+import com.hrishi.vls.ScannerUtils;
 import com.hrishi.vls.analyzers.AuthorTrendAnalyzer;
 import com.hrishi.vls.analyzers.BorrowingTrendAnalyzer;
 import com.hrishi.vls.analyzers.GenreTrendAnalyzer;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Scanner;
+
 
 public class Library {
 
@@ -101,7 +103,7 @@ public class Library {
     public void showStatistics() {
         while (true) {
             printMenu1();
-            int statsChoice = getUserChoice1();
+            int statsChoice = ScannerUtils.getIntInput("Choose an option:");
 
             switch (statsChoice) {
                 case 1:
@@ -136,7 +138,7 @@ public class Library {
     public void analyzer() {
         while (true) {
             printMenu2();
-            int analyzerChoice = getUserChoice1();
+            int analyzerChoice = ScannerUtils.getIntInput("Choose an option:");
 
             switch (analyzerChoice) {
                 case 1:
@@ -180,7 +182,7 @@ public class Library {
         System.out.println("3. Number of currently borrowed books");
         System.out.println("4. List of titles of all borrowed books");
         System.out.println("5. Back to Main Menu");
-        System.out.print("Choose an option: ");
+        //System.out.print("Choose an option: ");
     }
 
     private static void printMenu2() {
@@ -192,11 +194,8 @@ public class Library {
         System.out.println("5. Analyze Trending Authors");
         System.out.println("6. Analyze Most Popular Book");
         System.out.println("7. Back to Main Menu");
-        System.out.print("Choose an option: ");
+
     }
 
-    private static int getUserChoice1() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
-    }
+
 }

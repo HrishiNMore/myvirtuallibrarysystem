@@ -1,5 +1,6 @@
 package com.hrishi.vls.search;
 
+import com.hrishi.vls.ScannerUtils;
 import com.hrishi.vls.models.Book;
 import com.hrishi.vls.models.Library;
 import com.hrishi.vls.operations.BookLender;
@@ -43,6 +44,7 @@ public class BookSearcher {
         System.out.println("6. No of Copies");
         System.out.print("Choose an option: ");
         int option = sc.nextInt();
+
         SearchStrategy searchStrategy = getSearchStrategy(option);
         System.out.println("Enter the search key:");
         sc.nextLine();
