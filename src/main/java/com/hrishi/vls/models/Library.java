@@ -1,6 +1,7 @@
 package com.hrishi.vls.models;
 
 
+import com.hrishi.vls.ScannerUtils;
 import com.hrishi.vls.analyzers.AuthorTrendAnalyzer;
 import com.hrishi.vls.analyzers.BorrowingTrendAnalyzer;
 import com.hrishi.vls.analyzers.GenreTrendAnalyzer;
@@ -15,12 +16,24 @@ import java.util.List;
 
 import java.util.Scanner;
 
+
 public class Library {
 
 
     public List<Book> books = new ArrayList<>();
     private ISBNChecker check = new ISBNChecker();
     public List<TransactionLog> log = new ArrayList<>();
+
+    private AuthorTrendAnalyzer authorTrendAnalyzer;
+    private BorrowingTrendAnalyzer borrowingTrendAnalyzer;
+    private GenreTrendAnalyzer genreTrendAnalyzer;
+    private MostBorrowedBooks mostBorrowedBooks;
+    // BookLender bookLender;
+    private BookLender bookLender;
+
+
+    private BookReturner bookReturner;
+    private BookStatisticsCalculator bookStatisticsCalculator;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     Scanner sc = new Scanner(System.in);
@@ -29,6 +42,13 @@ public class Library {
     public Library() {
         this.books = new ArrayList<>();
         this.check = new ISBNChecker();
+        this.bookLender = new BookLender();
+        this.bookReturner = new BookReturner();
+        this.authorTrendAnalyzer = new AuthorTrendAnalyzer();
+        this.borrowingTrendAnalyzer = new BorrowingTrendAnalyzer();
+        this.genreTrendAnalyzer = new GenreTrendAnalyzer();
+        this.mostBorrowedBooks = new MostBorrowedBooks();
+        this.bookStatisticsCalculator = new BookStatisticsCalculator();
     }
 
 
@@ -67,12 +87,12 @@ public class Library {
     }
 
     public void borrowBook() {
-        BookLender.borrowByISBN(books, log);
+        bookLender.borrowByISBN(books, log);
     }
 
 
     public void returnBook() {
-        BookReturner.ReturnBook(books, log);
+        bookReturner.ReturnBook(books, log);
     }
 
     public void UploadBook(String path) {
@@ -83,21 +103,21 @@ public class Library {
     public void showStatistics() {
         while (true) {
             printMenu1();
-            int statsChoice = getUserChoice1();
+            int statsChoice = ScannerUtils.getIntInput("Choose an option:");
 
             switch (statsChoice) {
                 case 1:
-                    BookStatisticsCalculator.displayLibraryStatistics(books, log);
+                    bookStatisticsCalculator.displayLibraryStatistics(books, log);
                     break;
                 case 2:
-                    System.out.println("Total number of books present: " + BookStatisticsCalculator.getTotalBooks(books));
+                    System.out.println("Total number of books present: " + bookStatisticsCalculator.getTotalBooks(books));
                     break;
                 case 3:
-                    System.out.println("Number of currently borrowed books: " + BookStatisticsCalculator.calculateCurrentlyBorrowedBooksCount(log));
+                    System.out.println("Number of currently borrowed books: " + bookStatisticsCalculator.calculateCurrentlyBorrowedBooksCount(log));
                     break;
                 case 4:
                     System.out.println("List of titles of all borrowed books:");
-                    List<String> borrowedTitles = BookStatisticsCalculator.getAllBorrowedBookTitles(log, books);
+                    List<String> borrowedTitles = bookStatisticsCalculator.getAllBorrowedBookTitles(log, books);
                     for (String title : borrowedTitles) {
                         System.out.println(title);
                     }
@@ -118,30 +138,30 @@ public class Library {
     public void analyzer() {
         while (true) {
             printMenu2();
-            int analyzerChoice = getUserChoice1();
+            int analyzerChoice = ScannerUtils.getIntInput("Choose an option:");
 
             switch (analyzerChoice) {
                 case 1:
-                    BorrowingTrendAnalyzer.analyzeBorrowingTrendsPerMonth(log);
+                    borrowingTrendAnalyzer.analyzeBorrowingTrendsPerMonth(log);
                     break;
                 case 2:
-                    BorrowingTrendAnalyzer.analyzeBorrowingTrendsPerQuarter(log);
+                    borrowingTrendAnalyzer.analyzeBorrowingTrendsPerQuarter(log);
                     break;
                 case 3:
                     System.out.println("Enter the year to analyze : ");
                     int year = sc.nextInt();
-                    BorrowingTrendAnalyzer.analyzeBorrowingTrendsPerYear(log, year);
+                    borrowingTrendAnalyzer.analyzeBorrowingTrendsPerYear(log, year);
                     break;
                 case 4:
-                    GenreTrendAnalyzer.analyzeGenreTrends(books, log);
+                    genreTrendAnalyzer.analyzeGenreTrends(books, log);
                     break;
                 case 5:
-                    AuthorTrendAnalyzer.analyzeAuthorTrends(books, log);
+                    authorTrendAnalyzer.analyzeAuthorTrends(books, log);
                     break;
                 case 6:
                     System.out.println("Display Top - ");
                     int limit = sc.nextInt();
-                    MostBorrowedBooks.analyzeMostBorrowedBooks(books, log, limit);
+                    mostBorrowedBooks.analyzeMostBorrowedBooks(books, log, limit);
                     break;
                 case 7:
                     break;
@@ -162,7 +182,7 @@ public class Library {
         System.out.println("3. Number of currently borrowed books");
         System.out.println("4. List of titles of all borrowed books");
         System.out.println("5. Back to Main Menu");
-        System.out.print("Choose an option: ");
+        //System.out.print("Choose an option: ");
     }
 
     private static void printMenu2() {
@@ -174,11 +194,8 @@ public class Library {
         System.out.println("5. Analyze Trending Authors");
         System.out.println("6. Analyze Most Popular Book");
         System.out.println("7. Back to Main Menu");
-        System.out.print("Choose an option: ");
+
     }
 
-    private static int getUserChoice1() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
-    }
+
 }
