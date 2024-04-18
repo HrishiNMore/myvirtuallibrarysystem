@@ -1,7 +1,5 @@
 package com.hrishi.vls;
 
-import com.hrishi.vls.models.Library;
-
 import java.util.Scanner;
 
 // Enum representing available library functionalities
@@ -19,7 +17,7 @@ enum LibraryOption {
 
 // Refactored LibraryCommands class to manage commands associated with each LibraryOption
 class LibraryCommands {
-    private static Library lib = new Library();
+    private static LibraryManager lib = new LibraryManager();
 
     // Method to execute a command based on LibraryOption
     public static void executeCommand(LibraryOption option) {

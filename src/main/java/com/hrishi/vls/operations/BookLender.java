@@ -1,7 +1,7 @@
 package com.hrishi.vls.operations;
 
 import com.hrishi.vls.models.Book;
-import com.hrishi.vls.models.Library;
+import com.hrishi.vls.LibraryManager;
 import com.hrishi.vls.models.TransactionLog;
 import com.hrishi.vls.search.BookSearcher;
 import com.hrishi.vls.search.SearchStatus;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BookLender {
-    private static Library library = new Library();
+    private static LibraryManager library = new LibraryManager();
     private static Scanner sc = new Scanner(System.in);
     private BookSearcher bookSearcher;
 

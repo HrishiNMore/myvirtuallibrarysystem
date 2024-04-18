@@ -1,12 +1,13 @@
-package com.hrishi.vls.models;
+package com.hrishi.vls;
 
 
-import com.hrishi.vls.ScannerUtils;
 import com.hrishi.vls.analyzers.AuthorTrendAnalyzer;
 import com.hrishi.vls.analyzers.BorrowingTrendAnalyzer;
 import com.hrishi.vls.analyzers.GenreTrendAnalyzer;
 import com.hrishi.vls.analyzers.MostBorrowedBooks;
 import com.hrishi.vls.isbn.ISBNChecker;
+import com.hrishi.vls.models.Book;
+import com.hrishi.vls.models.TransactionLog;
 import com.hrishi.vls.operations.*;
 import com.hrishi.vls.search.BookSearcher;
 
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 
 
-public class Library {
+public class LibraryManager {
 
 
     public List<Book> books = new ArrayList<>();
@@ -39,7 +40,7 @@ public class Library {
     Scanner sc = new Scanner(System.in);
 
 
-    public Library() {
+    public LibraryManager() {
         this.books = new ArrayList<>();
         this.check = new ISBNChecker();
         this.bookLender = new BookLender();
@@ -99,40 +100,97 @@ public class Library {
         BookUploader upload = new BookUploader();
         upload.uploadBook(path, books);
     }
+//--------------------------------------------------------------------------------------------------
+    public enum StatisticsOption {
+        DISPLAY_LIBRARY_STATISTICS(1),
+        TOTAL_BOOKS_PRESENT(2),
+        CURRENTLY_BORROWED_BOOKS_COUNT(3),
+        LIST_BORROWED_BOOK_TITLES(4),
+        EXIT(5);
 
+        private final int value;
+
+        StatisticsOption(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public static StatisticsOption getByValue(int value) {
+            for (StatisticsOption option : values()) {
+                if (option.getValue() == value) {
+                    return option;
+                }
+            }
+            return null;
+        }
+    }
     public void showStatistics() {
         while (true) {
             printMenu1();
             int statsChoice = ScannerUtils.getIntInput("Choose an option:");
+            StatisticsOption option = StatisticsOption.getByValue(statsChoice);
 
-            switch (statsChoice) {
-                case 1:
-                    bookStatisticsCalculator.displayLibraryStatistics(books, log);
-                    break;
-                case 2:
-                    System.out.println("Total number of books present: " + bookStatisticsCalculator.getTotalBooks(books));
-                    break;
-                case 3:
-                    System.out.println("Number of currently borrowed books: " + bookStatisticsCalculator.calculateCurrentlyBorrowedBooksCount(log));
-                    break;
-                case 4:
-                    System.out.println("List of titles of all borrowed books:");
-                    List<String> borrowedTitles = bookStatisticsCalculator.getAllBorrowedBookTitles(log, books);
-                    for (String title : borrowedTitles) {
-                        System.out.println(title);
-                    }
-                    break;
-                case 5:
-                    break;
-                default:
-                    System.out.println("Invalid selection. Please try again.");
-                    break;
+            if (option != null) {
+                switch (option) {
+                    case DISPLAY_LIBRARY_STATISTICS:
+                        bookStatisticsCalculator.displayLibraryStatistics(books, log);
+                        break;
+                    case TOTAL_BOOKS_PRESENT:
+                        System.out.println("Total number of books present: " + bookStatisticsCalculator.getTotalBooks(books));
+                        break;
+                    case CURRENTLY_BORROWED_BOOKS_COUNT:
+                        System.out.println("Number of currently borrowed books: " + bookStatisticsCalculator.calculateCurrentlyBorrowedBooksCount(log));
+                        break;
+                    case LIST_BORROWED_BOOK_TITLES:
+                        System.out.println("List of titles of all borrowed books:");
+                        List<String> borrowedTitles = bookStatisticsCalculator.getAllBorrowedBookTitles(log, books);
+                        for (String title : borrowedTitles) {
+                            System.out.println(title);
+                        }
+                        break;
+                    case EXIT:
+                        return;
+                    default:
+                        System.out.println("Invalid selection. Please try again.");
+                        break;
+                }
+            } else {
+                System.out.println("Invalid selection. Please try again.");
             }
+        }
+    }
+//----------------------------------------------------------------------------------------------------------
 
-            if (statsChoice == 5)
-                break;
+    public enum AnalyzerOption {
+        BORROWING_TRENDS_PER_MONTH(1),
+        BORROWING_TRENDS_PER_QUARTER(2),
+        BORROWING_TRENDS_PER_YEAR(3),
+        GENRE_TRENDS(4),
+        AUTHOR_TRENDS(5),
+        MOST_BORROWED_BOOKS(6),
+        EXIT(7);
+
+        private final int value;
+
+        AnalyzerOption(int value) {
+            this.value = value;
         }
 
+        public int getValue() {
+            return value;
+        }
+
+        public static AnalyzerOption fromValue(int value) {
+            for (AnalyzerOption option : values()) {
+                if (option.value == value) {
+                    return option;
+                }
+            }
+            return null; // Or throw an exception if value is invalid
+        }
     }
 
     public void analyzer() {
@@ -140,41 +198,42 @@ public class Library {
             printMenu2();
             int analyzerChoice = ScannerUtils.getIntInput("Choose an option:");
 
-            switch (analyzerChoice) {
-                case 1:
+            AnalyzerOption option = AnalyzerOption.fromValue(analyzerChoice);
+            if (option == null) {
+                System.out.println("Invalid selection. Please try again.");
+                continue;
+            }
+
+            switch (option) {
+                case BORROWING_TRENDS_PER_MONTH:
                     borrowingTrendAnalyzer.analyzeBorrowingTrendsPerMonth(log);
                     break;
-                case 2:
+                case BORROWING_TRENDS_PER_QUARTER:
                     borrowingTrendAnalyzer.analyzeBorrowingTrendsPerQuarter(log);
                     break;
-                case 3:
+                case BORROWING_TRENDS_PER_YEAR:
                     System.out.println("Enter the year to analyze : ");
                     int year = sc.nextInt();
                     borrowingTrendAnalyzer.analyzeBorrowingTrendsPerYear(log, year);
                     break;
-                case 4:
+                case GENRE_TRENDS:
                     genreTrendAnalyzer.analyzeGenreTrends(books, log);
                     break;
-                case 5:
+                case AUTHOR_TRENDS:
                     authorTrendAnalyzer.analyzeAuthorTrends(books, log);
                     break;
-                case 6:
+                case MOST_BORROWED_BOOKS:
                     System.out.println("Display Top - ");
                     int limit = sc.nextInt();
                     mostBorrowedBooks.analyzeMostBorrowedBooks(books, log, limit);
                     break;
-                case 7:
-                    break;
-                default:
-                    System.out.println("Invalid selection. Please try again.");
-                    break;
+                case EXIT:
+                    return;
             }
-
-            if (analyzerChoice == 7)
-                break;
         }
     }
 
+//------------------------------------------------------------------------------------------------------
     private static void printMenu1() {
         System.out.println("\nBooks Statistics Overview:");
         System.out.println("1. Show All Books ");

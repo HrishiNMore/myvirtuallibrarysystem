@@ -1,7 +1,7 @@
 package com.hrishi.vls.operations;
 
 import com.hrishi.vls.models.Book;
-import com.hrishi.vls.models.Library;
+import com.hrishi.vls.LibraryManager;
 import com.hrishi.vls.models.TransactionLog;
 
 import java.time.LocalDate;
@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class BookReturner {
 
 
-    private Library library;
+    private LibraryManager library;
     private TransactionLog lg;
 
     static Scanner sc = new Scanner(System.in);
