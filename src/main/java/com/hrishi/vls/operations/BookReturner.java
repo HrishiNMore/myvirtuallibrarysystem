@@ -1,7 +1,7 @@
 package com.hrishi.vls.operations;
 
 import com.hrishi.vls.models.Book;
-import com.hrishi.vls.models.Library;
+import com.hrishi.vls.LibraryManager;
 import com.hrishi.vls.models.TransactionLog;
 
 import java.time.LocalDate;
@@ -11,13 +11,13 @@ import java.util.Scanner;
 public class BookReturner {
 
 
-    private Library library;
+    private LibraryManager library;
     private TransactionLog lg;
 
     static Scanner sc = new Scanner(System.in);
 
 
-    public static void ReturnBook(List<Book> books, List<TransactionLog> log) {
+    public void ReturnBook(List<Book> books, List<TransactionLog> log) {
         System.out.println("Enter your UserID to return the book: ");
         int userID = sc.nextInt();
         System.out.println("Enter ISBN of the Book you want to return: ");

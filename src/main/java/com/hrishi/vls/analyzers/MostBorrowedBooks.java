@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MostBorrowedBooks {
-    public static void analyzeMostBorrowedBooks(List<Book> books, List<TransactionLog> logs, int limit) {
+    public void analyzeMostBorrowedBooks(List<Book> books, List<TransactionLog> logs, int limit) {
 
 
         if (logs.isEmpty() || books.isEmpty()) {
@@ -34,7 +34,7 @@ public class MostBorrowedBooks {
                 });
     }
 
-    private static Book findBookByISBN(List<Book> books, String isbn) {
+    private Book findBookByISBN(List<Book> books, String isbn) {
         return books.stream()
                 .filter(book -> book.getISBN().equals(isbn))
                 .findFirst()

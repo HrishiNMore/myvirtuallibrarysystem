@@ -1,7 +1,6 @@
 package com.hrishi.vls.search;
 
 import com.hrishi.vls.models.Book;
-import com.hrishi.vls.models.Library;
 import com.hrishi.vls.operations.BookLender;
 
 import java.time.LocalDate;
@@ -23,6 +22,10 @@ public class BookSearcher {
         this.books = books;
     }
 
+    public BookSearcher() {
+
+    }
+
 
     public void search() {
         if (books.isEmpty()) {
@@ -39,6 +42,7 @@ public class BookSearcher {
         System.out.println("6. No of Copies");
         System.out.print("Choose an option: ");
         int option = sc.nextInt();
+
         SearchStrategy searchStrategy = getSearchStrategy(option);
         System.out.println("Enter the search key:");
         sc.nextLine();
@@ -89,7 +93,7 @@ public class BookSearcher {
     }
 
 
-    public static List<Book> searchByTitle(String title, List<Book> books) {
+    public List<Book> searchByTitle(String title, List<Book> books) {
         List<Book> result = new ArrayList<>();
         for (Book book : books) {
             if (book.getTitle().equalsIgnoreCase(title)) {
@@ -99,7 +103,7 @@ public class BookSearcher {
         return result;
     }
 
-    public static List<Book> searchByAuthor(String author, List<Book> books) {
+    public List<Book> searchByAuthor(String author, List<Book> books) {
         List<Book> result = new ArrayList<>();
         for (Book book : books) {
             if (book.getAuthor().equalsIgnoreCase(author)) {
@@ -109,7 +113,7 @@ public class BookSearcher {
         return result;
     }
 
-    public static List<Book> searchByGenre(String Genre, List<Book> books) {
+    public List<Book> searchByGenre(String Genre, List<Book> books) {
         List<Book> result = new ArrayList<>();
         for (Book book : books) {
             if (book.getGenre().equalsIgnoreCase(Genre)) {
@@ -119,7 +123,7 @@ public class BookSearcher {
         return result;
     }
 
-    public static List<Book> searchByISBN(String isbn, List<Book> books) {
+    public List<Book> searchByISBN(String isbn, List<Book> books) {
         List<Book> result = new ArrayList<>();
         for (Book book : books) {
             if (book.getISBN().equalsIgnoreCase(isbn)) {
@@ -129,7 +133,7 @@ public class BookSearcher {
         return result;
     }
 
-    public static List<Book> searchByDate(LocalDate date, List<Book> books) {
+    public List<Book> searchByDate(LocalDate date, List<Book> books) {
         List<Book> result = new ArrayList<>();
         for (Book book : books) {
             if (book.getPublication_Date().isEqual(date)) {
@@ -139,7 +143,7 @@ public class BookSearcher {
         return result;
     }
 
-    public static List<Book> searchByCopies(int copies, List<Book> books) {
+    public List<Book> searchByCopies(int copies, List<Book> books) {
         List<Book> result = new ArrayList<>();
         for (Book book : books) {
             if (book.getNoOfCopies() == copies) {
@@ -149,50 +153,61 @@ public class BookSearcher {
         return result;
     }
 
+    public enum FilterOption {
+        TITLE,
+        AUTHOR,
+        ISBN,
+        GENRE,
+        PUBLISHED_DATE,
+        NO_OF_COPIES
+    }
+
     public List<Book> addfilter(List<Book> result) {
+        Scanner sc = new Scanner(System.in);
+
         System.out.println("Do you want to Filter the result(Y/N) ?:");
         String ch = sc.next();
         if (!ch.equalsIgnoreCase("y")) {
             return result; // If user doesn't want to filter, return the original result
         }
+
         while (ch.equalsIgnoreCase("y")) {
             System.out.println("Filter By : ");
-            System.out.println("1. Title");
-            System.out.println("2. Author");
-            System.out.println("3. ISBN");
-            System.out.println("4. Genre");
-            System.out.println("5. Published Date");
-            System.out.println("6. No of Copies");
+            for (FilterOption option : FilterOption.values()) {
+                System.out.println((option.ordinal() + 1) + ". " + option.name());
+            }
             System.out.print("Choose an option: ");
-            int a = sc.nextInt();
-            switch (a) {
-                case 1:
+            int choice = sc.nextInt();
+            FilterOption selectedOption = FilterOption.values()[choice - 1];
+
+            switch (selectedOption) {
+                case TITLE:
                     System.out.println("Enter the Title of Book :");
                     String title = sc.next();
                     result = searchByTitle(title, result);
                     break;
-                case 2:
+                case AUTHOR:
                     System.out.println("Enter the Author of Book :");
                     String author = sc.next();
                     result = searchByAuthor(author, result);
                     break;
-                case 3:
+                case ISBN:
                     System.out.println("Enter the ISBN of Book :");
                     String isbn = sc.next();
                     result = searchByISBN(isbn, result);
                     break;
-                case 4:
+                case GENRE:
                     System.out.println("Enter Genre of Book :");
                     String genre = sc.next();
                     result = searchByGenre(genre, result);
                     break;
-                case 5:
-                    System.out.println("Enter the Publication Date of Book :");
+                case PUBLISHED_DATE:
+                    System.out.println("Enter the Publication Date of Book (YYYY-MM-DD):");
                     String d = sc.next();
                     LocalDate date = LocalDate.parse(d, formatter);
                     result = searchByDate(date, result);
                     break;
-                case 6:
+                case NO_OF_COPIES:
                     System.out.println("Enter the No of copies of book :");
                     int noOfCopies = sc.nextInt();
                     result = searchByCopies(noOfCopies, result);
@@ -222,8 +237,8 @@ public class BookSearcher {
                 System.out.println("Invalid book selection.");
                 return Collections.emptyList();
             }
-
         }
         return result;
     }
+
 }
